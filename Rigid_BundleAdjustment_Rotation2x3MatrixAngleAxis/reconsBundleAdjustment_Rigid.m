@@ -6,13 +6,13 @@
 
 function reconsBundleAdjustment_Rigid ()
 
-addpath('./Toolbox');
+addpath('../Toolbox');
 
 % Read points from file
-M = dlmread('../Data/landmark_d1.txt');
+M = dlmread('../../Data/landmark_d1.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
-selectedFrames = 1:10:size(M,1);
+selectedFrames = 1:20:size(M,1);
 M = M(selectedFrames, :);
 
 X =[];
@@ -33,19 +33,20 @@ initMat = [1/sqrt(2) -1/sqrt(2) 0; 1/sqrt(2) 1/sqrt(2) 0; 0 0 1];
 init_angleaxis = RotationMatrix2AngleAxis(initMat);
 % For matrices
 for iCam = 1:no_cams
-    Ag(:,:,iCam) = init_angleaxis;
+    Ag(:,iCam) = init_angleaxis';
 end
 
 % For 3D points
 P(1:2,:) = X(1:2,:);
 P(3,:) = 1;
+P = ones(3, no_pts);
 
 %% Doing optimization
 agg = [Ag(:); P(:)];
 options = optimoptions(@lsqnonlin,'Algorithm','levenberg-marquardt','Display','off');
 
 [optm_res, resnorm] = lsqnonlin(@(variable) calResidual(X,variable), agg,[],[],options);
-%disp(resnorm);
+disp(resnorm);
 
 
 
