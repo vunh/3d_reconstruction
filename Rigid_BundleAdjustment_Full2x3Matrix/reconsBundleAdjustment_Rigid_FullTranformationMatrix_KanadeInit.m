@@ -42,22 +42,22 @@ P = ones(3, no_pts);
 
 
 %% Kanade Initialization
-[U, S, V] = svd(X, 0);
-U1 = U(:,1:3);
-S1 = S(1:3,1:3);
-sqrt_S1 = sqrt(S1);
-K = V';
-K1 = K(1:3,:);
-
-R_temp = U1*sqrt_S1;     % init R
-P = sqrt_S1*K1;     % init P
-
-R=[];
-for i = 1:no_cams
-    temp = R_temp(2*i-1:2*i,:);
-    temp = [temp; 0 0 1];
-    R(:,:,i) = temp;
-end
+% [U, S, V] = svd(X, 0);
+% U1 = U(:,1:3);
+% S1 = S(1:3,1:3);
+% sqrt_S1 = sqrt(S1);
+% K = V';
+% K1 = K(1:3,:);
+% 
+% R_temp = U1*sqrt_S1;     % init R
+% P = sqrt_S1*K1;     % init P
+% 
+% R=[];
+% for i = 1:no_cams
+%     temp = R_temp(2*i-1:2*i,:);
+%     temp = [temp; 0 0 1];
+%     R(:,:,i) = temp;
+% end
 
 
 % Residual and ReProjection Error before optimization
