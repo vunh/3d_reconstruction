@@ -10,7 +10,7 @@ P = reshape(P_arr, 3, []);
 
 %% Doing transformation and calculate the reprojection error
 residual = [];
-for iCam = 1:size(R,2)
+for iCam = 1:size(R,3)
     % Transform P using R
     trP = R(:,:,iCam)*P;
     x = trP(1,:);

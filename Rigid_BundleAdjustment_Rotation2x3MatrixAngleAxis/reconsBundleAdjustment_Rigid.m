@@ -46,7 +46,7 @@ agg = [Ag(:); P(:)];
 options = optimoptions(@lsqnonlin,'Algorithm','levenberg-marquardt','Display','off');
 
 [optm_res, resnorm] = lsqnonlin(@(variable) calResidual(X,variable), agg,[],[],options);
-disp(resnorm);
+%disp(resnorm);
 
 
 
@@ -66,7 +66,8 @@ K1 = K(1:3,:);
 TR = U1*sqrt_S1;
 S = sqrt_S1*K1;
 
-kanade_error = sum(kanadeResidual(X, TR, S) .^ 2);
+%kanade_error = sum(kanadeResidual(X, TR, S) .^ 2);
+kanade_error = sum(
 new_error = sum(calResidual(X, [R_opt(:); P_opt(:)]) .^ 2);
 disp(kanade_error);
 disp(new_error);
