@@ -1,6 +1,7 @@
 function residual = calResidualNonRigidFullMatrix (X, agg)
 
 wPS = 500;
+wVarPS = 500;
 
 no_pts = size(X,2);
 no_cams = size(X,1)/2;
@@ -16,8 +17,17 @@ for i = 1:no_cams
 end
 singularVals = svds(PS, min(no_cams, 3*no_pts));
 singularVals = singularVals(:);
+varPS = var(PS);
+
 
 residual = X - R*P;
 residual = residual(:);
-residual = [residual; wPS*singularVals];
+% Display penalty values for observing
+disp('---------------');
+disp(sum(wVarPS*varPS(:) .^2));
+disp(sum(wPS*PS(:) .^2));
+disp(sum(residual(:) .^2));
+
+% Aggregate Residual
+residual = [residual; wPS*singularVals; wVarPS*varPS(:)];
 end

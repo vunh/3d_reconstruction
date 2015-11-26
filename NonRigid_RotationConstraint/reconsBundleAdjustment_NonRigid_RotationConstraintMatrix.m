@@ -1,9 +1,9 @@
 % This function computes the Tranformation matrices and Non-Rigid 3D points using
 % Bundle Adjustment (Levenberg-Marquardt)
 % The matrices are formularized as for orthographic projections => we used
-% full 2x3 matrices for transformation
+% Angle-Axis (with 3 dof for rotation transformation)
 
-function reconsBundleAdjustment_NonRigid_FullTranformationMatrix ()
+function reconsBundleAdjustment_NonRigid_RotationConstraintMatrix ()
 
 addpath('../');
 addpath('../Toolbox');
