@@ -15,8 +15,8 @@ for iCam = 1:size(R,2)
     trP = AngleAxisRotatePts(R(:,iCam), P);
     x = trP(1,:);
     y = trP(2,:);
-    deltaX = x - X(2*iCam - 1);
-    deltaY = y - X(2*iCam);
+    deltaX = x - X(2*iCam - 1,:);
+    deltaY = y - X(2*iCam,:);
     residual = [residual; [deltaX deltaY]];
 end
 

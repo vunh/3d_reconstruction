@@ -30,10 +30,11 @@ no_pts = size(X,2);
 no_cams = size(X,1)/2;
 
 initMat = [1/sqrt(2) -1/sqrt(2) 0; 1/sqrt(2) 1/sqrt(2) 0; 0 0 1];
+init_angleaxis = RotationMatrix2AngleAxis(initMat);
 % For matrices
-R = zeros(2*no_cams, 3*no_cams);
+Ag = zeros(3, no_cams);
 for iCam = 1:no_cams
-    R(2*iCam - 1:2*iCam, 3*iCam - 2:3*iCam) = initMat(1:2,:);
+    Ag(:,iCam) = init_angleaxis;
 end
 
 % For 3D points
@@ -48,7 +49,7 @@ end
 %disp(sum(initialResidual(:) .^2));
 
 %% Doing optimization
-agg = [R(:); P(:)];
+agg = [Ag(:); P(:)];
 options = optimoptions(@lsqnonlin,'Algorithm','levenberg-marquardt','Display','off');
 
 [optm_res, resnorm] = lsqnonlin(@(variable) calResidualNonRigidFullMatrix(X,variable), agg,[],[],options);
