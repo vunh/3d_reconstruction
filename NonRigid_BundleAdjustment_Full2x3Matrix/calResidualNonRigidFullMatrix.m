@@ -23,10 +23,10 @@ varPS = var(PS);
 residual = X - R*P;
 residual = residual(:);
 % Display penalty values for observing
-disp('---------------');
-disp(sum(wVarPS*varPS(:) .^2));
-disp(sum(wPS*PS(:) .^2));
-disp(sum(residual(:) .^2));
+% disp('---------------');
+% disp(sum(wVarPS*varPS(:) .^2));
+% disp(sum(wPS*PS(:) .^2));
+% disp(sum(residual(:) .^2));
 
 % Aggregate Residual
 residual = [residual; wPS*singularVals; wVarPS*varPS(:)];

@@ -9,10 +9,10 @@ addpath('../');
 addpath('../Toolbox');
 
 % Read points from file
-M = dlmread('../../Data/landmark_d1.txt');
+M = dlmread('../../Data/landmark_d2.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
-selectedFrames = 1:50:size(M,1);
+selectedFrames = 1:20:size(M,1);
 M = M(selectedFrames, :);
 
 X =[];
@@ -52,12 +52,12 @@ end
 agg = [Ag(:); P(:)];
 options = optimoptions(@lsqnonlin,'Algorithm','levenberg-marquardt','Display','off');
 
-[optm_res, resnorm] = lsqnonlin(@(variable) calResidualNonRigidFullMatrix(X,variable), agg,[],[],options);
+[optm_res, resnorm] = lsqnonlin(@(variable) calResidualNonRigid_AngleAxis(X,variable), agg,[],[],options);
 disp(resnorm);
 
-R_arr = optm_res(1:2*no_cams*3*no_cams, 1);
-P_arr = optm_res(2*no_cams*3*no_cams + 1:end, 1);
-R_opt = reshape(R_arr, 2*no_cams, 3*no_cams);
+R_arr = optm_res(1:3*no_cams, 1);
+P_arr = optm_res(3*no_cams + 1:end,1);
+R_opt = reshape(R_arr, 3, []);
 P_opt = reshape(P_arr, 3*no_cams, no_pts);
 
 %finalResidual = calculateResidual_Neutral(X, R_opt, P_opt);
@@ -79,8 +79,8 @@ P_opt = reshape(P_arr, 3*no_cams, no_pts);
 % disp(kanade_error);
 % disp(new_error);
 
-neutral_error = calculateNonRigidResidual_Neutral(X, R_opt, P_opt);
-disp(sum(neutral_error(:) .^2));
+%neutral_error = calculateNonRigidResidual_Neutral(X, R_opt, P_opt);
+%disp(sum(neutral_error(:) .^2));
 
 ptX = P_opt(1,:);
 ptY = P_opt(2,:);
