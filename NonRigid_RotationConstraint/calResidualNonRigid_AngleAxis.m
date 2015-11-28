@@ -1,7 +1,7 @@
 function res = calResidualNonRigid_AngleAxis(X, agg)
 
-wPS = 500;
-wVarPS = 500;
+wPS = 0;
+wVarPS = 10;
 
 no_pts = size(X, 2);
 no_cams = size(X, 1)/2;
@@ -12,6 +12,7 @@ P_arr = agg(3*no_cams + 1:end,1);
 R = reshape(angle_axis_arr, 3, []);
 P = reshape(P_arr, 3*no_cams, no_pts);
 
+%% Rand of PS and variance of PS
 PS = [];
 for i = 1:no_cams
     PS(i,:) = [P(3*i-2,:), P(3*i-1,:), P(3*i,:)];
@@ -20,6 +21,7 @@ singularVals = svds(PS, min(no_cams, 3*no_pts));
 singularVals = singularVals(:);
 varPS = var(PS);
 
+%% ReProjection Error
 reprj = [];
 for i = 1:no_cams
     pt = P(3*i - 2:3*i,:);
@@ -32,6 +34,9 @@ for i = 1:no_cams
 %     residual = [residual; [deltaX deltaY]];
 end
 residual = X - reprj;
+
+%% Combine
 res = [residual(:); wPS*singularVals; wVarPS*varPS(:)];
+%res = residual(:);
 
 end

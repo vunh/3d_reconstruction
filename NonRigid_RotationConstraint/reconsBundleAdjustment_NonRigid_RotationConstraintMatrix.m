@@ -9,10 +9,10 @@ addpath('../');
 addpath('../Toolbox');
 
 % Read points from file
-M = dlmread('../../Data/landmark_d2.txt');
+M = dlmread('../../Data/landmark_d5.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
-selectedFrames = 1:20:size(M,1);
+selectedFrames = 1:10:size(M,1);
 M = M(selectedFrames, :);
 
 X =[];
@@ -57,8 +57,13 @@ disp(resnorm);
 
 R_arr = optm_res(1:3*no_cams, 1);
 P_arr = optm_res(3*no_cams + 1:end,1);
-R_opt = reshape(R_arr, 3, []);
+angle_axis = reshape(R_arr, 3, []);
 P_opt = reshape(P_arr, 3*no_cams, no_pts);
+
+% Transform angle axis back to rotation matrix
+for i = 1:size(angle_axis, 2)
+    R_opt(:,:,i) = AngleAxis2RotationMatrix(angle_axis(:,i));
+end
 
 %finalResidual = calculateResidual_Neutral(X, R_opt, P_opt);
 %disp(sum(finalResidual(:) .^2));
@@ -79,8 +84,8 @@ P_opt = reshape(P_arr, 3*no_cams, no_pts);
 % disp(kanade_error);
 % disp(new_error);
 
-%neutral_error = calculateNonRigidResidual_Neutral(X, R_opt, P_opt);
-%disp(sum(neutral_error(:) .^2));
+neutral_error = calculate_NonRigidResidual_Neutral(X, R_opt, P_opt);
+disp(sum(neutral_error(:) .^2));
 
 ptX = P_opt(1,:);
 ptY = P_opt(2,:);

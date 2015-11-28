@@ -9,7 +9,7 @@ addpath('../');
 addpath('../Toolbox');
 
 % Read points from file
-M = dlmread('../../Data/landmark_d1.txt');
+M = dlmread('../../Data/landmark_d2.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
 selectedFrames = 1:50:size(M,1);
