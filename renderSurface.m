@@ -1,13 +1,13 @@
-function renderSurface(pX, pY, Itens, TRIV, imgWidth, imgHeight)
+function [img, img_depth] = renderSurface(pX, pY, pZ, Itens, TRIV, imgWidth, imgHeight)
 
 img = zeros(imgHeight, imgWidth);
 img_depth = zeros(imgHeight, imgWidth);
 
 nTriang = size(TRIV, 1);
 for iTri = 1:nTriang
-    p1 = [pY(TRIV(iTri, 1)) pX(TRIV(iTri, 1))];
-    p2 = [pY(TRIV(iTri, 2)) pX(TRIV(iTri, 2))];
-    p3 = [pY(TRIV(iTri, 3)) pX(TRIV(iTri, 3))];
+    p1 = [pY(TRIV(iTri, 1)) pX(TRIV(iTri, 1)) pZ(TRIV(iTri, 1))];
+    p2 = [pY(TRIV(iTri, 2)) pX(TRIV(iTri, 2)) pZ(TRIV(iTri, 2))];
+    p3 = [pY(TRIV(iTri, 3)) pX(TRIV(iTri, 3)) pZ(TRIV(iTri, 3))];
     
     avgColor = mean([Itens(TRIV(iTri, 1)) Itens(TRIV(iTri, 2)) Itens(TRIV(iTri, 3))]);
     
@@ -19,6 +19,7 @@ for iTri = 1:nTriang
     for iX = smallX:largeX
         for iY = smallY:largeY
             p = [iY, iX];
+            meanDepth = mean([p1(3), p2(3), p3(3)]);
             if (checkSameSide(p, p3, p1, p2) == 1 && ...
                 checkSameSide(p, p2, p1, p3) == 1 && ...
                 checkSameSide(p, p1, p2, p3) == 1)
@@ -27,7 +28,9 @@ for iTri = 1:nTriang
                 % to pixel coordinatte (y-axis down)
                 img(imgHeight - iY + 1, iX) = avgColor; 
                 
-                
+                % We approximate the depths of all inside points
+                % by taking the average of 3 vertices
+                img_depth(imgHeight - iY + 1, iX) = meanDepth;
             end
         end
     end

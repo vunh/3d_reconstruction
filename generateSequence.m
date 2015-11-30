@@ -3,9 +3,17 @@ function generateSequence ()
 data = load(['/Users/vunguyen/Documents/Study/CSE 527 - Introduction to Computer Vision'...
             '/Project/RealData/HumanFace/face/face01.mat']);
         
+imageDir = '/Users/vunguyen/Documents/Study/CSE 527 - Introduction to Computer Vision/Project/RealData/HumanFace_Syn/Face01';
+        
 X = data.surface.X;
 Y = data.surface.Y;
 Z = data.surface.Z;
+
+% Translate Z to be positive to be easier to control
+minZ = min(Z);
+deltaZ = 1 - minZ;
+Z = Z + deltaZ;
+
 Itens = data.surface.I;
 TRIV = data.surface.TRIV;
 
@@ -54,8 +62,13 @@ maxY = max(yArr(:));
 width = maxX;
 height = maxY;
 
+
 for i = 1:size(rotP,3)
-    renderSurface(rotP(1,:,i), rotP(2,:,i), Itens, TRIV, width, height);
+    [img, img_depth] = renderSurface(rotP(1,:,i), rotP(2,:,i), rotP(3,:,i),...
+                                    Itens, TRIV, width, height);
+    imname = sprintf('%.5d', i);
+    imwrite(img, fullfile(imageDir, [imname '.bmp']));
+    dlmwrite(fullfile(imageDir, [imname '.txt']), img_depth);
 end
 
 end
