@@ -1,11 +1,7 @@
-function renderSurface(X, Y, Z, I, TRIV)
+function renderSurface(pX, pY, Itens, TRIV, imgWidth, imgHeight)
 
-
-width = max(pX(:));
-height = max(pY(:));
-
-img = zeros(height, width);
-img_depth = zeros(height, width);
+img = zeros(imgHeight, imgWidth);
+img_depth = zeros(imgHeight, imgWidth);
 
 nTriang = size(TRIV, 1);
 for iTri = 1:nTriang
@@ -26,14 +22,19 @@ for iTri = 1:nTriang
             if (checkSameSide(p, p3, p1, p2) == 1 && ...
                 checkSameSide(p, p2, p1, p3) == 1 && ...
                 checkSameSide(p, p1, p2, p3) == 1)
-                img(iY, iX) = avgColor;
+
+                % imgHeight - iY: to change from camera (y-axis up)
+                % to pixel coordinatte (y-axis down)
+                img(imgHeight - iY + 1, iX) = avgColor; 
+                
                 
             end
         end
     end
 end
 
-imshow(img);
+% figure;
+% imshow(img);
 
 end
 

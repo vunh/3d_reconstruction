@@ -10,43 +10,52 @@ Itens = data.surface.I;
 TRIV = data.surface.TRIV;
 
 % Refine X,Y and Z to integer
-X = int16(X' * 1000);       % X, Y, Z are converted to row vectors
-Y = int16(Y' * 1000);
-Z = int16(Z' * 1000);
+X = X' * 1000;       % X, Y, Z are converted to row vectors
+Y = Y' * 1000;
+Z = Z' * 1000;
 P = [X; Y; Z];
 
 % Transformation before rendering
-trX = [];
-trY = [];
-trZ = [];
-
-% First rotate -pi/4 to the start position
-beginMat = [cos(-pi/4) 0 -sin(-pi/4); 0 1 0; sin(-pi/4) 0 cos(-pi/4)];
-P = beginMat*P;
+meanZ = mean(P(3,:));
+P(3,:) = P(3,:) - meanZ;    % Translate the obj to the origin (Z = 0)
 
 % Rotation for transformation
-delta_angle = pi/16;
-start_angle = -pi/4
-end_angle = pi/4;
+% And align X and Y coordinate so that these coordinates are positive(>=0)
+delta_angle = pi/32;
+start_angle = -pi/8
+end_angle = pi/8;
+
+
+
 
 iShape = 1;
 for angle = start_angle:delta_angle:end_angle
     rotmat = [cos(angle) 0 -sin(angle); 0 1 0; sin(angle) 0 cos(angle)];
-    arrP(:,:,iShape) = rotmat*P;
+    rotP(:,:,iShape) = round(rotmat*P);
     iShape = iShape + 1;
 end
-pX = X;
-pY = Y;
-pZ = Z;
+rotP(3,:,:) = rotP(3,:,:) + meanZ;  % Translate back to the original position in terms of Z
+xArr = rotP(1,:,:);
+yArr = rotP(2,:,:);
+minX = min(xArr(:));
+minY = min(yArr(:));
 
-% 
-minX = min(pX(:));
-minY = min(pY(:));
+
 deltaX = 1 - minX;
 deltaY = 1 - minY;
 
-pX = pX + deltaX;
-pY = pY + deltaY;
+rotP(1,:) = rotP(1,:) + deltaX;
+rotP(2,:) = rotP(2,:) + deltaY;
 
+xArr = rotP(1,:,:);     % Update xArr and yArr
+yArr = rotP(2,:,:);
+maxX = max(xArr(:));
+maxY = max(yArr(:));
+width = maxX;
+height = maxY;
+
+for i = 1:size(rotP,3)
+    renderSurface(rotP(1,:,i), rotP(2,:,i), Itens, TRIV, width, height);
+end
 
 end
