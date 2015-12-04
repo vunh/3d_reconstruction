@@ -41,8 +41,13 @@ K1 = K(1:3,:);
 R = U1*sqrt_S1;     % R is the reconstructed transformation matrix
 S = sqrt_S1*K1;     % S is the coordinate of the root model
 
-% Optimization the reconstructed model for each camera
+%% Optimization the reconstructed model for each camera
 for iCam = 1:no_cams
+    % Fix the model and adjust the rotation so that reprojection error is
+    % minimum
+    
+    initMat = [1 0 0; 0 1 0; 0 0 1];
+    init_angleaxis = RotationMatrix2AngleAxis(initMat);
     
 end
 
