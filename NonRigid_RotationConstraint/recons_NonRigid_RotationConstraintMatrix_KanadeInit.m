@@ -3,7 +3,7 @@
 % The matrices are formularized as for orthographic projections => we used
 % Angle-Axis (with 3 dof for rotation transformation)
 
-function reconsBundleAdjustment_NonRigid_RotationConstraintMatrix ()
+function recons_NonRigid_RotationConstraintMatrix_KanadeInit ()
 
 addpath('../');
 addpath('../Toolbox');
@@ -38,9 +38,19 @@ for iCam = 1:no_cams
 end
 
 % For 3D points
+[U, S, V] = svd(X, 0);
+U1 = U(:,1:3);
+S1 = S(1:3,1:3);
+sqrt_S1 = sqrt(S1);
+K = V';
+K1 = K(1:3,:);
+
+R = U1*sqrt_S1;
+S = sqrt_S1*K1;
 for iCam = 1:no_cams
-    P(3*iCam-2:3*iCam-1,:) = X(2*iCam - 1: 2*iCam,:);
-    P(3*iCam,:) = 1;
+    %P(3*iCam-2:3*iCam,:) = S(:,:);
+    P(3*iCam-2:3*iCam,:) = ones(size(S,1), size(S,2));
+    %P(3*iCam,:) = 1;
 end
 %P = ones(3, no_pts);
 

@@ -1,7 +1,7 @@
 function res = calResidualNonRigid_AngleAxis(X, agg)
 
-wPS = 0;
-wVarPS = 10;
+wPS = 50;
+wVarPS = 50;
 
 no_pts = size(X, 2);
 no_cams = size(X, 1)/2;

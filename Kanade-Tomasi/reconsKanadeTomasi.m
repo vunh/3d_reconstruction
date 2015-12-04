@@ -1,7 +1,7 @@
 function reconsKanadeTomasi()
 
 % Read points from file
-M = dlmread('../Data/landmark_d1.txt');
+M = dlmread('../../Data/landmark_d1.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
 X =[];
@@ -29,7 +29,9 @@ ptY = S(2,:);
 ptZ = S(3,:);
 
 figure;
+
 scatter3(ptX, ptY, ptZ);
+axis equal;
 
 a = 3;
 
