@@ -24,14 +24,24 @@ K1 = K(1:3,:);
 R = U1*sqrt_S1;
 S = sqrt_S1*K1;
 
-ptX = S(1,:);
-ptY = S(2,:);
-ptZ = S(3,:);
+ptSet = 1:size(X,2);
+rm_set = [];
+ptSet(rm_set) = [];
 
-figure;
+ptX = S(1,ptSet);
+ptY = S(2,ptSet);
+ptZ = S(3,ptSet);
+
+figure(1);
 
 scatter3(ptX, ptY, ptZ);
 axis equal;
+
+hold;
+% Draw labels
+for i = 1:size(X,2);
+    text(ptX(1,i), ptY(1,i), ptZ(1,i), num2str(i));
+end
 
 a = 3;
 
