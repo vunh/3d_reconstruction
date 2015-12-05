@@ -34,6 +34,15 @@ ptZ = S(3,ptSet);
 
 figure(1);
 
+% Added code to test delaunay triangulation generator
+TRI = delaunay(S(1,:), S(2,:));
+grid off;
+TRI = removeTriangle(36:41, TRI);
+TRI = removeTriangle(42:47, TRI);
+TRI = removeTriangle(60:67, TRI);
+trimesh(TRI, ptX, ptY, ptZ);
+
+figure(2);
 scatter3(ptX, ptY, ptZ);
 axis equal;
 

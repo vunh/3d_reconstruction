@@ -9,7 +9,7 @@ function reconsBundleAdjustment_Rigid ()
 addpath('../Toolbox');
 
 % Read points from file
-M = dlmread('../../Data/landmark_d1.txt');
+M = dlmread('../../Data/landmark_d5.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
 selectedFrames = 1:10:size(M,1);
