@@ -11,6 +11,7 @@ addpath('./Auxiliary');
 
 % Params
 rigid_root_path = '/Users/vunguyen/Documents/Study/CSE 527 - Introduction to Computer Vision/Project/Results/NonRigid_RigidBundleRoot/RigidBundleInit_Results';
+figure_image_path = '/Users/vunguyen/Documents/Study/CSE 527 - Introduction to Computer Vision/Project/Results/NonRigid_RigidBundleRoot/FigurePlot';
 landmark_file = '../../Data/landmark_MIT1.txt';
 frame_step = 5;
 
@@ -59,21 +60,25 @@ for iCam = 1:no_cams
 end
 
 load('FaceTriangulation.mat');
-for iCam = 1:5:no_cams
+figure('Visible', 'Off');
+
+for iCam = 1:no_cams
+    clf;
     rx = [1 0 0; 0 -1 0; 0 0 -1];
     ry = [-1 0 0; 0 1 0; 0 0 -1];
     rz = [-1 0 0; 0 -1 0; 0 0 1];
     
     rot2 = rotateQuaternion([1 1 0], pi/2);
-    rot3 = rotateQuaternion([0 0 1], -pi/2);
+    rot3 = rotateQuaternion([0 0 1], 8*pi/5);
+    rot4 = rotateQuaternion([0 1 0], pi/6);
+    rot5 = rotateQuaternion([0 1 0], -pi/8);
     
-    normP_opt = rot3*rot2*rx*P_opt(:,:,iCam);
+    normP_opt = rot5*rot4*rot3*rot2*rx*P_opt(:,:,iCam);
     %normP_opt = AngleAxisRotatePts([0 0 0]', P_opt(:,:,iCam));
     ptX = normP_opt(1,:);
     ptY = normP_opt(2,:);
     ptZ = normP_opt(3,:);
 
-    figure;
     %view(0, 90);
     %trimesh(TRI, ptX, ptY, ptZ);
     
@@ -82,11 +87,16 @@ for iCam = 1:5:no_cams
     %scatter(X(1,:), X(2,:))
     %scatter3(S(1,:), S(2,:), S(3,:));
     
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    %xlabel('x');
+    %ylabel('y');
+    %zlabel('z');
     
     axis equal;
+    
+    % Save image to file
+    imgpath = fullfile(figure_image_path,...
+        [name '_Step' num2str(frame_step)], sprintf('%.5d', selectedFrames(iCam)));
+    print(imgpath, '-djpeg');
 end
 
 a = 3;
