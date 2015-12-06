@@ -10,7 +10,7 @@ addpath('../Toolbox');
 addpath('./Auxiliary');
 
 % Read points from file
-M = dlmread('../../Data/landmark_d5.txt');
+M = dlmread('../../Data/landmark_MIT1.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
 selectedFrames = 1:10:size(M,1);
@@ -45,15 +45,35 @@ for iCam = 1:no_cams
     disp(iCam);
 end
 
-for iCam = 1:4:no_cams
-    ptX = P_opt(1,:,iCam);
-    ptY = P_opt(2,:,iCam);
-    ptZ = P_opt(3,:,iCam);
+load('FaceTriangulation.mat');
+for iCam = 1:5:no_cams
+    rx = [1 0 0; 0 -1 0; 0 0 -1];
+    ry = [-1 0 0; 0 1 0; 0 0 -1];
+    rz = [-1 0 0; 0 -1 0; 0 0 1];
+    
+    rot2 = rotateQuaternion([1 1 0], pi/2);
+    rot3 = rotateQuaternion([0 0 1], -pi/2);
+    
+    normP_opt = rot3*rot2*rx*P_opt(:,:,iCam);
+    %normP_opt = AngleAxisRotatePts([0 0 0]', P_opt(:,:,iCam));
+    ptX = normP_opt(1,:);
+    ptY = normP_opt(2,:);
+    ptZ = normP_opt(3,:);
 
     figure;
-    scatter3(ptX, ptY, ptZ);
+    %view(0, 90);
+    %trimesh(TRI, ptX, ptY, ptZ);
+    
+    trisurf(TRI, ptX, ptY, ptZ);
+    %scatter3(ptX, ptY, ptZ);
     %scatter(X(1,:), X(2,:))
     %scatter3(S(1,:), S(2,:), S(3,:));
+    
+    xlabel('x');
+    ylabel('y');
+    zlabel('z');
+    
+    axis equal;
 end
 
 a = 3;

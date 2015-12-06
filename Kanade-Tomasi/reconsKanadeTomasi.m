@@ -40,6 +40,7 @@ grid off;
 TRI = removeTriangle(36:41, TRI);
 TRI = removeTriangle(42:47, TRI);
 TRI = removeTriangle(60:67, TRI);
+save('TRI.mat', 'TRI');
 trimesh(TRI, ptX, ptY, ptZ);
 
 figure(2);
