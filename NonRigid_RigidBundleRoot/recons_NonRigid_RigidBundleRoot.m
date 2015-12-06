@@ -9,11 +9,16 @@ addpath('../');
 addpath('../Toolbox');
 addpath('./Auxiliary');
 
+% Params
+rigid_root_path = '/Users/vunguyen/Documents/Study/CSE 527 - Introduction to Computer Vision/Project/Results/NonRigid_RigidBundleRoot/RigidBundleInit_Results';
+landmark_file = '../../Data/landmark_MIT1.txt';
+frame_step = 5;
+
 % Read points from file
-M = dlmread('../../Data/landmark_MIT1.txt');
+M = dlmread(landmark_file);
 M = M(:,2:end);     % Eliminate the first number of each frame
 
-selectedFrames = 1:5:size(M,1);
+selectedFrames = 1:frame_step:size(M,1);
 M = M(selectedFrames, :);
 
 %% Subtract coordinates with means to eliminate the translation element
@@ -31,7 +36,15 @@ no_pts = size(X,2);
 no_cams = size(X,1)/2;
 
 %% Initilize matrices and 3D points by Rigid-Bundle Adjustment
-[P_root, angle_axis] = reconsBundleAdjustment_Rigid (X);
+[path, name, ext] = fileparts(landmark_file);
+rigid_root_file = fullfile(rigid_root_path, [name '_step' num2str(frame_step) '.mat']);
+if (exist(rigid_root_file, 'file') == 2)
+    load(rigid_root_file);
+else
+    [P_root, angle_axis] = reconsBundleAdjustment_Rigid (X);
+    % Save P_root and angle_axis
+    save(rigid_root_file, 'P_root', 'angle_axis');
+end
 
 %% Optimization the reconstructed model for each camera
 
