@@ -3,7 +3,7 @@
 % The matrices are formularized as for orthographic projections => we used
 % Angle-Axis (with 3 dof for rotation transformation)
 
-function recons_NonRigid_KanadeRoot ()
+function recons_NonRigid_RigidBundleRoot ()
 
 addpath('../');
 addpath('../Toolbox');
@@ -13,7 +13,7 @@ addpath('./Auxiliary');
 M = dlmread('../../Data/landmark_MIT1.txt');
 M = M(:,2:end);     % Eliminate the first number of each frame
 
-selectedFrames = 1:10:size(M,1);
+selectedFrames = 1:5:size(M,1);
 M = M(selectedFrames, :);
 
 %% Subtract coordinates with means to eliminate the translation element
